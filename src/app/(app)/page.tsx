@@ -1,26 +1,18 @@
-'use client'
-import React from "react";
-import { BackgroundBeams } from "@/components/ui/background-beams";
+"use client";
+import Home from "@/components/HeroSection";
+import FeaturesSection from "@/components/FeatureSection";
+import HowItWorks from "@/components/HowItWorks";
+import TestimonialsGrid from "@/components/Testimonial";
+import CallToAction from "@/components/CTASection";
 
-export default function Home() {
+export default function App() {
   return (
-    // Hero Section
-    <div className="h-[40rem] w-full rounded-md bg-neutral-950 relative flex flex-col items-center justify-center antialiased">
-      <div className="max-w-6xl mx-auto p-6 text-center">
-        <h1 className="relative z-10 text-lg md:text-7xl  bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-600  text-center font-sans font-bold">
-          Welcome to FlowPost
-        </h1>
-        <p className="text-neutral-400 max-w-lg mx-auto mt-4 text-lg">
-          Effortless Broadcast Emails – Send Once, Reach Many!
-        </p>
-        
-        <p className="text-neutral-500 max-w-lg mx-auto mt-2 text-base">
-          Stop wasting time sending the same email over and over. <br />
-          Automate your communication with Flow Post!
-        </p>
-      </div>
-      <BackgroundBeams />
-
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+      <Home />
+      <FeaturesSection />
+      <HowItWorks />
+      <TestimonialsGrid />
+      <CallToAction />
     </div>
   );
 }
