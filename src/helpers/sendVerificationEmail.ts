@@ -18,6 +18,7 @@ export async function sendVerificationEmail(
         </body>
       </html>
     `;
+    console.log("Sending verification email to", verifyCode);
 
     const info = await transporter.sendMail({
       from: process.env.GMAIL_USER, // Your Gmail address
