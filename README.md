@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Flow-Post
 
-## Getting Started
+Flow-Post is a broadcast email service designed to help users send emails efficiently by categorizing recipients into groups. Users can compose emails and send them to entire categories, avoiding repetitive email writing.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **User Authentication** 🔐
+  - ✅ Sign up and email verification
+  - 🔜 (Future) Two-factor authentication (2FA)
+  - 🔜 (Future) Role-based access control (User/Admin)
+  - 🔜 (Future) Admins can send unlimited emails via Stripe subscription
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Recipient & Category Management** 📂
+  - 🏷️ Create categories to organize recipients
+  - 📋 Add recipients (name, email, category assignment)
+  - 📢 Categories function like WhatsApp broadcast lists
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Email Composition & Sending** ✉️
+  - 📩 Select categories to send emails to all recipients within them
+  - 📤 Emails are sent via Gmail SMTP with OAuth authentication
+  - 👤 Each user sends emails from their own Gmail account
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Dashboard UI** 🖥️
+  - 📑 Sidebar with categories & recipients, inbox, and sent emails
+  - 📝 Email composer for drafting and sending emails
+  - 📬 Sent Emails & Inbox (Upcoming feature)
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+### Frontend:
+- ⚛️ **Next.js** - Framework for React-based UI development
+- 🎨 **ShadCN & Aceternity UI** - For styling and UI components
+- 🔐 **NextAuth.js** - Authentication & session management
+- 🔄 **Axios** - API requests
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Backend:
+- 🏗️ **Node.js & Express** - Backend framework
+- 🗄️ **MongoDB** - Database for storing users, categories, and recipients
+- 📧 **Nodemailer** - SMTP email delivery
+- 📩 **SendGrid** - Alternative email delivery option
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📌 Installation
 
-## Deploy on Vercel
+### Prerequisites ⚙️
+- Node.js (v18+)
+- MongoDB (local or cloud-based like MongoDB Atlas)
+- Gmail Developer OAuth Credentials (for SMTP authentication)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Steps 📥
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/flow-post.git
+   cd flow-post
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables in `.env` file:
+   ```env
+   NEXTAUTH_SECRET=your_secret
+   NEXTAUTH_URL=http://localhost:3000
+   MONGODB_URI=your_mongo_db_connection
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=465
+   SMTP_USER=your_gmail_address
+   SMTP_PASS=your_gmail_app_password
+   ```
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚀 Deployment
+
+### Frontend 🌍
+- Deploy on **Vercel**
+  ```bash
+  vercel deploy
+  ```
+
+### Backend 🖥️
+- Deploy on **Railway, Render, or DigitalOcean**
+  ```bash
+  npm run start
+  ```
+
+## 🔮 Future Roadmap
+- 🔜 Role-based authentication (User/Admin)
+- 🔜 Two-factor authentication (2FA)
+- 🔜 Stripe subscription for unlimited emails
+- 🔜 Inbox feature for receiving replies
+- 🔜 Enhanced email tracking (open/click analytics)
+- 🔜 AI-powered email generation
+
+## 🤝 Contributing
+Contributions are welcome! Feel free to open issues and pull requests.
+
+## 📜 License
+MIT License
