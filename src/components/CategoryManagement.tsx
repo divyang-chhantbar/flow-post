@@ -75,6 +75,7 @@ export default function CategoryManagement() {
     setError(null);
     try {
       const { data } = await api.get<Category[]>("/category");
+      console.log("Fetched Categories:", data);
       setCategories(data);
     } catch (err) {
       const errorMessage = axios.isAxiosError(err)
@@ -85,7 +86,7 @@ export default function CategoryManagement() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [setCategories]);
 
   useEffect(() => {
     fetchCategories();
@@ -96,11 +97,8 @@ export default function CategoryManagement() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const { data: newCategory } = await api.post<Category>(
-        "/category",
-        formData
-      );
-      setCategories((prev) => [...prev, newCategory]);
+      await api.post<Category>("/category", formData);
+      await fetchCategories(); // re-fetch to get updated categories with recipients
       toast.success("Category created successfully");
       setFormData({ name: "", description: "" });
       setOpen(false);
@@ -126,27 +124,22 @@ export default function CategoryManagement() {
         categoryId: selectedCategory,
       });
       if (response.status === 200) {
-        setCategories((prev) =>
-          prev.map((category) => {
-            if (category._id === selectedCategory) {
-              return {
-                ...category,
-                recipients: [...category.recipients, recipientData],
-              };
-            }
-            return category;
-          })
-        );
         toast.success(response.data.message || "Recipient added successfully");
         setRecipientData({ name: "", email: "" });
+        await fetchCategories();
+        console.log(
+          "Re-fetched after adding recipient — selectedCategory:",
+          selectedCategory
+        );
+
         setRecipientDialogOpen(false);
       }
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        toast.error(err.response?.data?.message || err.message);
-      } else {
-        toast.error("Failed to add recipient");
-      }
+      toast.error(
+        axios.isAxiosError(err)
+          ? err.response?.data?.message || err.message
+          : "Failed to add recipient"
+      );
     }
   };
 
@@ -166,7 +159,6 @@ export default function CategoryManagement() {
     );
     toast.success("Recipient removed successfully");
   };
-
   return (
     <div className="space-y-6">
       {/* Header Section */}
@@ -177,9 +169,17 @@ export default function CategoryManagement() {
             Manage your email recipient categories
           </p>
         </div>
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog
+          open={open}
+          onOpenChange={(isOpen) => {
+            setOpen(isOpen);
+            if (!isOpen) {
+              setFormData({ name: "", description: "" });
+            }
+          }}
+        >
           <DialogTrigger asChild>
-            <Button>
+            <Button onClick={() => setOpen(true)}>
               <FolderPlus className="mr-2 h-4 w-4" />
               Add Category
             </Button>
@@ -344,13 +344,13 @@ export default function CategoryManagement() {
                     <div className="flex items-center gap-2 mb-4 cursor-pointer hover:text-primary">
                       <Users className="h-5 w-5 text-muted-foreground" />
                       <span className="text-sm font-medium">
-                        {category.recipients.length} Recipients
+                        {category.recipients?.length || 0} Recipients
                       </span>
                     </div>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <div className="space-y-2 mt-4">
-                      {category.recipients.map((recipient) => (
+                      {(category.recipients || []).map((recipient) => (
                         <div
                           key={recipient.email}
                           className="flex items-center justify-between p-3 bg-muted rounded-lg"
