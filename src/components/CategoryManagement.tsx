@@ -123,7 +123,7 @@ export default function CategoryManagement() {
         email: recipientData.email,
         categoryId: selectedCategory,
       });
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         toast.success(response.data.message || "Recipient added successfully");
         setRecipientData({ name: "", email: "" });
         await fetchCategories();
