@@ -25,9 +25,12 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 interface AppSidebarProps {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
+  activeTab: string
+  setActiveTab: (tab: string) => void
+  collapsed: boolean
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>
 }
+
 
 export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
   const { data: session } = useSession();
@@ -40,6 +43,10 @@ export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
     { icon: Users, label: "Recipients", value: "recipients" },
     { icon: Mail, label: "Compose Email", value: "compose" },
   ];
+
+  const cn = (...classes: (string | boolean | undefined)[]) => {
+    return classes.filter(Boolean).join(" ");
+  };
 
   return (
     <Sidebar className={`transition-all ${collapsed ? "w-16" : "w-64"}`}>
@@ -56,9 +63,9 @@ export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
               <SidebarMenuButton
                 isActive={activeTab === item.value}
                 onClick={() => setActiveTab(item.value)}
-                className="justify-between"
+                className={cn("justify-start", collapsed && "justify-center")}
               >
-                <div className="flex items-center gap-2">
+                <div className={cn("flex items-center", collapsed ? "justify-center" : "gap-2")}>
                   <item.icon className="h-4 w-4" />
                   {!collapsed && <span>{item.label}</span>}
                 </div>
@@ -69,7 +76,7 @@ export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
       </SidebarContent>
       <SidebarFooter className="border-t border-border p-4">
         <Button variant="outline" size="sm" onClick={() => signOut()} className="w-full">
-          <LogOut className="h-4 w-4 mr-2" /> Sign Out
+          <LogOut className="h-4 w-4 mr-2" /> {!collapsed && "Sign Out"}
         </Button>
       </SidebarFooter>
     </Sidebar>
