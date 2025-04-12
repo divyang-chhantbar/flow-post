@@ -162,7 +162,7 @@ export default function CategoryManagement() {
   return (
     <div className="space-y-6">
       {/* Header Section */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Categories</h2>
           <p className="text-muted-foreground">
@@ -316,14 +316,14 @@ export default function CategoryManagement() {
 
       {/* Categories List */}
       {!loading && categories.length > 0 && (
-        <div className="grid gap-6">
+        <div className="grid gap-6 md:grid-cols-1">
           {categories.map((category) => (
             <Collapsible key={category._id}>
               <Card>
                 <CardHeader className="pb-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between flex-wrap gap-4">
                     <div>
-                      <CardTitle>{category.name}</CardTitle>
+                      <CardTitle className="flex items-center gap-2">{category.name}</CardTitle>
                       <CardDescription>{category.description}</CardDescription>
                     </div>
                     <Button
