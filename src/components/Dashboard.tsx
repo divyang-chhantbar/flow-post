@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button"
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("inbox")
   const [apiError, setApiError] = useState<string | null>(null)
+  const [collapsed, setCollapsed] = useState(false)
 
   // Check API connectivity using Axios
   useEffect(() => {
@@ -53,7 +54,11 @@ export default function Dashboard() {
   return (
     <SidebarProvider>
       <div className="flex h-screen bg-background">
-        <AppSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <AppSidebar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab}
+        collapsed = {collapsed}
+        setCollapsed = {setCollapsed} />
         <main className="flex-1 overflow-auto">
           <div className="container mx-auto py-6 px-4">
             {apiError && (
