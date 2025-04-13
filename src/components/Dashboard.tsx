@@ -3,7 +3,10 @@
 import { useState, useEffect } from "react"
 import axios, { AxiosError } from "axios"
 import { AppSidebar } from "./SideBar"
-import { SidebarProvider } from "@/components/ui/sidebar"
+import { 
+  SidebarProvider, 
+  SidebarInset 
+} from "@/components/ui/sidebar"
 import CategoryManagement from "./CategoryManagement"
 import EmailComposer from "./EmailComposer"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -14,7 +17,6 @@ import { Button } from "@/components/ui/button"
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("inbox")
   const [apiError, setApiError] = useState<string | null>(null)
-  const [collapsed, setCollapsed] = useState(false)
 
   // Check API connectivity using Axios
   useEffect(() => {
@@ -52,14 +54,13 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={true} style={{ "--sidebar-width-icon": "4rem" } as React.CSSProperties}>
       <div className="flex h-screen bg-background">
         <AppSidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab}
-        collapsed = {collapsed}
-        setCollapsed = {setCollapsed} />
-        <main className="flex-1 overflow-auto">
+          activeTab={activeTab} 
+          setActiveTab={setActiveTab}
+        />
+        <SidebarInset className="overflow-auto">
           <div className="container mx-auto py-6 px-4">
             {apiError && (
               <Alert variant="destructive" className="mb-6">
@@ -89,7 +90,7 @@ export default function Dashboard() {
               </TabsContent>
             </Tabs>
           </div>
-        </main>
+        </SidebarInset>
       </div>
     </SidebarProvider>
   )
