@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import {
   Card,
@@ -21,6 +21,7 @@ import {
   UserPlus,
   Mail,
   X,
+  Upload,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -37,6 +38,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import * as XLSX from "xlsx";
 
 interface Category {
   _id: string;
@@ -68,6 +70,7 @@ export default function CategoryManagement() {
     name: "",
     email: "",
   });
+  const [excelDialogOpen, setExcelDialogOpen] = useState(false);
 
   // Fetch categories
   const fetchCategories = useCallback(async () => {
@@ -159,6 +162,44 @@ export default function CategoryManagement() {
     );
     toast.success("Recipient removed successfully");
   };
+
+  // Parsing Excel data
+  const [parsedRows, setParsedRows] = useState<any[]>([]);
+
+  const handleExcelUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]; // e.target.files is a FileList, and [0] gets the first file
+    if (!file) return;
+
+    const data = await file.arrayBuffer(); // Read the file as an ArrayBuffer
+    const workbook = XLSX.read(data); // Parse the ArrayBuffer into a workbook
+    const sheet = workbook.Sheets[workbook.SheetNames[0]]; // Get the first sheet
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }); // Convert the sheet to JSON
+    setParsedRows(rows); // Set the parsed rows to state , it means we have the data in a 2D array format
+
+
+    toast.success("Excel file parsed successfully");
+  };
+
+  // Handle parsed data submission
+  const submitParsedDataToBackend = async () => {
+    if (!parsedRows.length) {
+      toast.error("No data to upload!");
+      return;
+    }
+  
+    try {
+      await api.post("/excel-upload", { rows: parsedRows });
+      toast.success("Excel data uploaded successfully!");
+      await fetchCategories(); // refresh UI
+      setExcelDialogOpen(false); // close the dialog if open
+    } catch (err) {
+      toast.error(axios.isAxiosError(err)
+        ? err.response?.data?.message || err.message
+        : "Upload failed."
+      );
+    }
+  };
+  
   return (
     <div className="space-y-6">
       {/* Header Section */}
@@ -233,6 +274,41 @@ export default function CategoryManagement() {
           </DialogContent>
         </Dialog>
       </div>
+
+      {/* Import from Excel */}
+      <Dialog open={excelDialogOpen} onOpenChange={setExcelDialogOpen}>
+  <DialogTrigger asChild>
+  <Button variant="outline" onClick={() => setExcelDialogOpen(true)}>
+      <Upload className="mr-2 h-4 w-4" />
+      Import Data from Excel
+    </Button>
+  </DialogTrigger>
+
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Import Categories + Recipients</DialogTitle>
+      <DialogDescription>
+        Upload an Excel sheet to automatically create categories and assign recipients.
+      </DialogDescription>
+    </DialogHeader>
+
+    {/* Excel Upload Input */}
+    <div className="grid gap-4 py-4">
+      <Input
+        type="file"
+        accept=".xlsx, .xls"
+        onChange={handleExcelUpload}
+      />
+    </div>
+
+    <DialogFooter>
+      <Button onClick={submitParsedDataToBackend}
+      >
+        Upload to Flow-Post
+      </Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
 
       {/* Add Recipient Dialog */}
       <Dialog open={recipientDialogOpen} onOpenChange={setRecipientDialogOpen}>
