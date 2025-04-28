@@ -1,67 +1,82 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import axios, { AxiosError } from "axios"
-import { AppSidebar } from "./SideBar"
-import { 
-  SidebarProvider, 
-  SidebarInset 
-} from "@/components/ui/sidebar"
-import CategoryManagement from "./CategoryManagement"
-import EmailComposer from "./EmailComposer"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, RefreshCcw } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react";
+import axios, { AxiosError } from "axios";
+import { AppSidebar } from "./SideBar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import CategoryManagement from "./CategoryManagement";
+import EmailComposer from "./EmailComposer";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle, RefreshCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion"; 
 
 export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState("inbox")
-  const [apiError, setApiError] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState("inbox");
+  
+  useEffect(() => {
+    const storedTab = localStorage.getItem("activeTab");
+    if (storedTab) {
+      setActiveTab(storedTab);
+    }
+  }, []);
 
-  // Check API connectivity using Axios
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    localStorage.setItem("activeTab", tab);
+  };
+
+  const [apiError, setApiError] = useState<string | null>(null);
+
   useEffect(() => {
     const checkApiStatus = async () => {
       try {
-        const response = await axios.get("/api/category", {
-          withCredentials: true,
-        })
+        const response = await axios.get("/api/category", { withCredentials: true });
         if (response.status !== 200) {
-          throw new Error("API is not reachable")
+          throw new Error("API is not reachable");
         }
-        // API is reachable, you can set the state or perform any action here
-        console.log("API is reachable")
-        // after successful check, you can clear the error state
-        setApiError(null) // Clear error if successful
+        setApiError(null);
       } catch (error: unknown) {
-        console.error("API connectivity check failed:", error)
+        console.error("API connectivity check failed:", error);
 
         if (error instanceof AxiosError && error.response) {
-          // Server responded with a status code outside the range of 2xx
-          const message = error.response.data?.message || error.response.statusText
-
-          setApiError(`API Error: ${message}`)
+          const message = error.response.data?.message || error.response.statusText;
+          setApiError(`API Error: ${message}`);
         } else if (error instanceof AxiosError && error.request) {
-          // Request was made but no response received
-          setApiError("No response from API. Please check your network.")
+          setApiError("No response from API. Please check your network.");
         } else {
-          // Something else happened
-          setApiError("Unexpected error occurred.")
+          setApiError("Unexpected error occurred.");
         }
       }
-    }
+    };
 
-    checkApiStatus()
-  }, [])
+    checkApiStatus();
+  }, []);
 
   return (
     <SidebarProvider defaultOpen={true} style={{ "--sidebar-width-icon": "4rem" } as React.CSSProperties}>
-      <div className="flex h-screen bg-background">
-        <AppSidebar 
-          activeTab={activeTab} 
-          setActiveTab={setActiveTab}
-        />
-        <SidebarInset className="overflow-auto">
-          <div className="container mx-auto py-6 px-4">
+      <div className="flex h-screen overflow-hidden bg-background">
+        <AppSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+
+        <SidebarInset className="flex flex-col flex-1 overflow-auto">
+          <div className="border-b border-border bg-background sticky top-0 z-10 px-4 py-3">
+            <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+              <TabsList className="flex gap-4">
+                <TabsTrigger value="inbox" className="text-lg">
+                  Inbox
+                </TabsTrigger>
+                <TabsTrigger value="categories" className="text-lg">
+                  Categories
+                </TabsTrigger>
+                <TabsTrigger value="compose" className="text-lg">
+                  Compose Email
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+
+          <div className="flex-1 p-6">
             {apiError && (
               <Alert variant="destructive" className="mb-6">
                 <AlertCircle className="h-4 w-4" />
@@ -77,21 +92,47 @@ export default function Dashboard() {
             )}
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="mb-6">
-                <TabsTrigger value="inbox">Inbox</TabsTrigger>
-                <TabsTrigger value="categories">Categories</TabsTrigger>
-                <TabsTrigger value="compose">Compose Email</TabsTrigger>
-              </TabsList>
-              <TabsContent value="categories">
-                <CategoryManagement />
+              <TabsContent value="inbox">
+                <motion.div
+                  key="inbox"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                >
+                  <div className="text-muted-foreground text-center py-20">
+                    Inbox is under construction 📬
+                  </div>
+                </motion.div>
               </TabsContent>
+
+              <TabsContent value="categories">
+                <motion.div
+                  key="categories"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                >
+                  <CategoryManagement />
+                </motion.div>
+              </TabsContent>
+
               <TabsContent value="compose">
-                <EmailComposer />
+                <motion.div
+                  key="compose"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                >
+                  <EmailComposer />
+                </motion.div>
               </TabsContent>
             </Tabs>
           </div>
         </SidebarInset>
       </div>
     </SidebarProvider>
-  )
+  );
 }
