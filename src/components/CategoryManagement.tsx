@@ -147,20 +147,32 @@ export default function CategoryManagement() {
   };
 
   //// Handle recipient removal
-  const handleRemoveRecipient = (categoryId: string, email: string) => {
-    setCategories((prev) =>
-      prev.map((category) => {
-        if (category._id === categoryId) {
-          return {
-            ...category,
-            recipients:
-              category.recipients?.filter((r) => r.email !== email) || [],
-          };
-        }
-        return category;
-      })
-    );
-    toast.success("Recipient removed successfully");
+  const handleRemoveRecipient = (categoryId: string, recipientEmail: string) => {
+    try {
+      api.delete("/recipients", {
+        data: { categoryId, recipientEmail },
+      });
+      toast.success("Recipient removed successfully");
+      // Update the local categories state instead of refetching
+      setCategories(prevCategories =>
+        prevCategories.map(category => {
+          if (category._id === categoryId) {
+            return {
+              ...category,
+              recipients: category.recipients.filter(recipient => recipient.email !== recipientEmail)
+            };
+          }
+          return category;
+        })
+      );
+    } catch (error) {
+      toast.error(
+        axios.isAxiosError(error)
+          ? error.response?.data?.message || error.message
+          : "Failed to remove recipient"
+      );
+      
+    }
   };
 
   // Parsing Excel data
@@ -199,6 +211,29 @@ export default function CategoryManagement() {
       );
     }
   };
+
+  // Delete category and its recipients
+  const handleDeleteCategory = async (categoryId: string) => {
+  try {
+    const res = await api.delete('/category', {
+      data: { categoryId },
+    });
+
+    if (res.status === 200) {
+      toast.success(res.data.message || "Category deleted successfully!");
+      await fetchCategories();
+    } else {
+      toast.error(res.data.message || "Failed to delete category.");
+    }
+  } catch (err) {
+    toast.error(
+      axios.isAxiosError(err)
+        ? err.response?.data?.message || err.message
+        : "Error deleting category."
+    );
+  }
+};
+
   
   return (
     <div className="space-y-6">
@@ -402,17 +437,26 @@ export default function CategoryManagement() {
                       <CardTitle className="flex items-center gap-2">{category.name}</CardTitle>
                       <CardDescription>{category.description}</CardDescription>
                     </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setSelectedCategory(category._id);
-                        setRecipientDialogOpen(true);
-                      }}
-                    >
-                      <UserPlus className="h-4 w-4 mr-2" />
-                      Add Recipient
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDeleteCategory(category._id)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedCategory(category._id);
+                          setRecipientDialogOpen(true);
+                        }}
+                      >
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        Add Recipient
+                      </Button>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent>
