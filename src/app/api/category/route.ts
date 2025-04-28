@@ -5,6 +5,7 @@ import { authOptions } from "../auth/[...nextauth]/option";
 import { dbConnect } from "@/lib/dbConnect";
 import CategoryModel from "@/models/category.model";
 import mongoose from "mongoose";
+import RecipientModel from "@/models/recipient.model";
 
 export async function POST(req: NextRequest) {  // Use NextRequest here
     try {
@@ -80,5 +81,52 @@ export async function GET(req:NextRequest) {
             message : "Issue in adding recipients to the category", error
         },
         {status : 500})
+    }
+}
+
+// Let's delete the category and all the recipients in it
+export async function DELETE(req: NextRequest) {
+    try {
+        await dbConnect();
+        const session = await getServerSession({req , ...authOptions});
+        if(!session){
+            return NextResponse.json({
+                message : "Unauthorised access"
+            },{
+                status : 401
+            })
+        }
+        const userId = new mongoose.Types.ObjectId(session.user._id);
+        const {categoryId} = await req.json();
+        if(!categoryId){
+            return NextResponse.json({
+                message : "Error getting categoryId"
+            },{status : 401})
+        }
+        console.log("categoryId :", categoryId);
+        const category = await CategoryModel.findOne({
+            _id : categoryId,userId});
+
+        if(!category){
+            return NextResponse.json({
+                message : "Category not found"
+            },{status : 404})
+        }
+        await RecipientModel.deleteMany({categoryId});
+        const deleteCategory = await CategoryModel.findByIdAndDelete(categoryId);
+       if(!deleteCategory){
+            return NextResponse.json({
+                message : "Error deleting category"
+            },{status : 404})
+        }
+        return NextResponse.json({
+            message : "Category and recipients deleted successfully"
+        },{status : 200})
+    } catch (error) {
+        console.error("Error deleting category and recipients:", error);
+        return NextResponse.json({
+            message : "Error deleting category and recipients",
+            error
+        },{status : 500})
     }
 }
