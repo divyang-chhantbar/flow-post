@@ -23,6 +23,7 @@ import {
   useSidebar
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface AppSidebarProps {
   activeTab: string;
@@ -67,6 +68,7 @@ export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="border-t border-border p-4">
+      <ThemeToggle collapsed={collapsed} variant="outline" size={collapsed ? "icon" : "default"} />
         <Button variant="outline" size="sm" onClick={() => signOut()} className="w-full">
           <LogOut className="h-4 w-4 mr-2" /> {!collapsed && "Sign Out"}
         </Button>
