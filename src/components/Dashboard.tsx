@@ -11,6 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion"; 
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("inbox");
@@ -55,6 +56,7 @@ export default function Dashboard() {
   }, []);
 
   return (
+    <ThemeProvider defaultTheme="system" storageKey="flow-post-theme">
     <SidebarProvider defaultOpen={true} style={{ "--sidebar-width-icon": "4rem" } as React.CSSProperties}>
       <div className="flex h-screen overflow-hidden bg-background">
         <AppSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -134,5 +136,6 @@ export default function Dashboard() {
         </SidebarInset>
       </div>
     </SidebarProvider>
+    </ThemeProvider>
   );
 }
