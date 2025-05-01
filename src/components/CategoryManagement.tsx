@@ -147,9 +147,9 @@ export default function CategoryManagement() {
   };
 
   //// Handle recipient removal
-  const handleRemoveRecipient = (categoryId: string, recipientEmail: string) => {
+  const handleRemoveRecipient = async (categoryId: string, recipientEmail: string) => {
     try {
-      api.delete("/recipients", {
+      await api.delete("/recipients", {
         data: { categoryId, recipientEmail },
       });
       toast.success("Recipient removed successfully");
