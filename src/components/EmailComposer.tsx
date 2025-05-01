@@ -107,6 +107,10 @@ export default function EmailComposer() {
     )
   }
 
+  const handleClear = () => {
+    setFormData({ subject: "", body: "" })
+  }
+
   const totalSelectedRecipients = categories
     .filter((category) => selectedCategories.includes(category._id))
     .reduce((total, category) => total + (category.recipients?.length || 0), 0)
@@ -183,7 +187,7 @@ export default function EmailComposer() {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between">
-                <Button variant="outline" type="reset">Clear</Button>
+                <Button variant="outline" type="button" onClick={handleClear}>Clear</Button>
                 <Button type="submit" disabled={sending || selectedCategories.length === 0}>
                   {sending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...</> : <><Send className="mr-2 h-4 w-4" /> Send Email</>}
                 </Button>
