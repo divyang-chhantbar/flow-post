@@ -50,6 +50,14 @@ export async function POST(req: NextRequest) {
     let processedRows = rows;
 
     // Check if the data is a 2D array by looking at the first row
+    interface RowData {
+      categoryName: string;
+      categoryDescription: string;
+      recipientName: string;
+      recipientEmail: string;
+      [key: string]: string;
+    }
+
     if (
       Array.isArray(rows[0]) &&
       typeof rows[0] === "object" &&
@@ -61,7 +69,7 @@ export async function POST(req: NextRequest) {
       // Skip the header row (index 0) and transform each data row
       for (let i = 1; i < rows.length; i++) {
         const rowData = rows[i];
-        const rowObj: any = {};
+        const rowObj: RowData = {} as RowData;
 
         // Map each column value to its corresponding header
         for (let j = 0; j < headers.length; j++) {
@@ -75,7 +83,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Let's extract the data from the rows
-    const categories = processedRows.map((row: any) => {
+    const categories = processedRows.map((row: RowData) => {
       return {
         name: row.categoryName || "",
         description: row.categoryDescription || "",
