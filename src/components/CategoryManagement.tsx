@@ -176,7 +176,7 @@ export default function CategoryManagement() {
   };
 
   // Parsing Excel data
-  const [parsedRows, setParsedRows] = useState<any[]>([]);
+  const [parsedRows, setParsedRows] = useState<(string | number)[][]>([]);
 
   const handleExcelUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]; // e.target.files is a FileList, and [0] gets the first file
@@ -185,7 +185,7 @@ export default function CategoryManagement() {
     const data = await file.arrayBuffer(); // Read the file as an ArrayBuffer
     const workbook = XLSX.read(data); // Parse the ArrayBuffer into a workbook
     const sheet = workbook.Sheets[workbook.SheetNames[0]]; // Get the first sheet
-    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }); // Convert the sheet to JSON
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as (string | number)[][]; // Convert the sheet to JSON
     setParsedRows(rows); // Set the parsed rows to state , it means we have the data in a 2D array format
 
 
