@@ -6,9 +6,8 @@ import { dbConnect } from "@/lib/dbConnect";
 import RecipientModel from "@/models/recipient.model";
 
 export async function POST(req : NextRequest) {
+    await dbConnect();
     try {
-        await dbConnect();
-
         const {name , email , categoryId} = await req.json();
         if (!name || !email || !categoryId) {
             return NextResponse.json({
@@ -49,8 +48,8 @@ export async function POST(req : NextRequest) {
 
 // lets delete the recipient
 export async function DELETE(req : NextRequest) {
+    await dbConnect();
     try {
-        await dbConnect();
         const {categoryId , recipientEmail} = await req.json();
         if (!categoryId || !recipientEmail) {
             return NextResponse.json({

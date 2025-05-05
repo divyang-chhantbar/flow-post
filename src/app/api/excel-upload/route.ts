@@ -7,9 +7,9 @@ import RecipientModel from "@/models/recipient.model";
 import { authOptions } from "@/app/api/auth/[...nextauth]/option";
 
 export async function POST(req: NextRequest) {
+  await dbConnect();
   try {
     // Db connection and session check
-    await dbConnect();
     const session = await getServerSession({ req, ...authOptions });
     if (!session) {
       return NextResponse.json(
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       );
     }
     const userId = new mongoose.Types.ObjectId(session.user._id);
-    console.log("userId : ", userId);
+    // console.log("userId : ", userId);
     if (!userId) {
       return NextResponse.json(
         {
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
 
     // Get the data from the request body
     const { rows } = await req.json();
-    console.log("rowsLength : ", rows.length);
+    // console.log("rowsLength : ", rows.length);
 
     if (!rows || rows.length === 0) {
       return NextResponse.json(
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Debug: Check the first row to see its structure
-    console.log("First row example:", JSON.stringify(rows[0]));
+    // console.log("First row example:", JSON.stringify(rows[0]));
 
     // Transform the data if it's a 2D array (with headers in first row)
     let processedRows = rows;
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
         processedRows.push(rowObj);
       }
 
-      console.log("Transformed first row:", JSON.stringify(processedRows[0]));
+      // console.log("Transformed first row:", JSON.stringify(processedRows[0]));
     }
 
     // Let's extract the data from the rows
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
         description: row.categoryDescription || "",
       };
     });
-    console.log("categories : ", categories);
+    // console.log("categories : ", categories);
 
     // Filter out categories with empty names
     const validCategories = categories.filter(
@@ -128,7 +128,7 @@ export async function POST(req: NextRequest) {
         }
       }
     );
-    console.log("categoryKeyToData : ", categoryKeyToData);
+    // console.log("categoryKeyToData : ", categoryKeyToData);
 
     // Loop through the parsed categories:
     // Add to categoryKeyToID if it doesn't exist yet
@@ -197,7 +197,7 @@ export async function POST(req: NextRequest) {
 
     if (recipientsToInsert.length > 0) {
       await RecipientModel.insertMany(recipientsToInsert);
-      console.log("Recipients inserted:", recipientsToInsert.length);
+      // console.log("Recipients inserted:", recipientsToInsert.length);
     } else {
       console.warn("No valid recipients to insert.");
     }

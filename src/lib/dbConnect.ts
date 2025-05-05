@@ -12,7 +12,9 @@ const connection: ConnectionObject = {};
 // Now let's create a function that will connect to the database.
 export async function dbConnect(): Promise<void> {
     if(connection.isConnected){
-        console.log("Already connected to the database");
+        if(process.env.NODE_ENV === "development"){
+            console.log("DB connection already established");
+        }
         return;
     }
     try {

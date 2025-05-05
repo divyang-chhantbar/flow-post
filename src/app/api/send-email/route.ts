@@ -9,12 +9,12 @@ import RecipientModel from "@/models/recipient.model";
 
 
 export async function POST(request: NextRequest) {
+  // lets get connected to the database
+  await dbConnect();
   try {
-    // lets get connected to the database
-    await dbConnect();
     // now its time for the session
     const session = await getServerSession({ req:request, ...authOptions });
-    console.log("This is the session: ", session);
+    // console.log("This is the session: ", session);
     
 
     if(!session){
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
     const categoryObjectIds = categoryIds.map((id: string)=> new mongoose.Types.ObjectId(id));
-    console.log("This are categoryIds : ",categoryObjectIds);
+    // console.log("This are categoryIds : ",categoryObjectIds);
     
     const userID = new mongoose.Types.ObjectId(session.user._id);
 const categories = await CategoryModel.find({
@@ -47,7 +47,7 @@ const categories = await CategoryModel.find({
   userId: userID,  // Updated from createdBy → userId
 });
 
-console.log("This are categories : ",categories);
+// console.log("This are categories : ",categories);
 
     if (!categories) {
       return NextResponse.json(
@@ -86,10 +86,10 @@ console.log("This are categories : ",categories);
 
     const msg = await transporter.sendMail(mailOptions);
 
-    console.log("Message sent: %s", msg.messageId);
+    // console.log("Message sent: %s", msg.messageId);
 
     if (!msg) {
-      console.log("Error sending email");
+      console.error("Error sending email");
     }
     
 

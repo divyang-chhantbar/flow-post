@@ -8,9 +8,8 @@ import mongoose from "mongoose";
 import RecipientModel from "@/models/recipient.model";
 
 export async function POST(req: NextRequest) {  // Use NextRequest here
+    await dbConnect();
     try {
-        await dbConnect();
-
         // Ensure cookies are accessible in the API route
         const session = await getServerSession({ req, ...authOptions });
         // console.log("session:", session);
@@ -43,8 +42,8 @@ export async function POST(req: NextRequest) {  // Use NextRequest here
 
 // lets get the recipients into the category
 export async function GET(req:NextRequest) {
+    await dbConnect();
     try {
-        await dbConnect();
         const session = await getServerSession({req, ...authOptions});
         if (!session) {
             return NextResponse.json({
@@ -74,7 +73,7 @@ export async function GET(req:NextRequest) {
                 }
             }
         ])
-        console.log("recipientInCategories :", recipientInCategories);
+        // console.log("recipientInCategories :", recipientInCategories);
         return NextResponse.json(recipientInCategories, { status: 200 });
     } catch (error) {
         return NextResponse.json({
@@ -86,8 +85,8 @@ export async function GET(req:NextRequest) {
 
 // Let's delete the category and all the recipients in it
 export async function DELETE(req: NextRequest) {
+    await dbConnect();
     try {
-        await dbConnect();
         const session = await getServerSession({req , ...authOptions});
         if(!session){
             return NextResponse.json({
@@ -103,7 +102,7 @@ export async function DELETE(req: NextRequest) {
                 message : "Error getting categoryId"
             },{status : 401})
         }
-        console.log("categoryId :", categoryId);
+        // console.log("categoryId :", categoryId);
         const category = await CategoryModel.findOne({
             _id : categoryId,userId});
 
