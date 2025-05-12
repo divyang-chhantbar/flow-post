@@ -52,7 +52,7 @@ export async function sendVerificationEmail(
 
             .header-img {
               width: 100%;
-              max-height: 300px;
+              max-height: 500px;
               object-fit: cover;
               border-bottom: 1px solid #e5e7eb;
             }
