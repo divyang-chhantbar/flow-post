@@ -3,7 +3,7 @@ import { Mail, Radio, Folder, KeyRound, ShieldCheck, BarChart } from "lucide-rea
 
 export default function FeaturesSection() {
   return (
-    <div className="h-[40rem] w-full bg-neutral-950 relative flex flex-col items-center justify-center antialiased">
+    <div className="min-h-screen w-full bg-neutral-950 relative flex flex-col items-center justify-center antialiased">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
         <div className="text-center">
           <h2 className="text-base text-violet-500 font-semibold tracking-wide uppercase">
