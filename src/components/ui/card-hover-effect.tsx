@@ -50,11 +50,13 @@ export const HoverEffect = ({
 
           {/* Card Content with Icon */}
           <Card>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col items-start space-y-4">
+            <div className="flex items-center gap-2">
               <span className="text-white">{item.icon}</span>
               <CardTitle>{item.title}</CardTitle>
             </div>
             <CardDescription>{item.description}</CardDescription>
+            </div>
           </Card>
         </div>
       ))}
@@ -91,7 +93,7 @@ export const CardTitle = ({
   children: React.ReactNode;
 }) => {
   return (
-    <h4 className={cn("text-zinc-100 font-bold tracking-wide mt-4", className)}>
+    <h4 className={cn("text-zinc-100 font-bold tracking-wide", className)}>
       {children}
     </h4>
   );
@@ -107,7 +109,7 @@ export const CardDescription = ({
   return (
     <p
       className={cn(
-        "mt-4 text-zinc-400 tracking-wide leading-relaxed text-sm",
+        "mt-4 text-zinc-400 tracking-wide leading-relaxed text-sm text-left",
         className
       )}
     >
