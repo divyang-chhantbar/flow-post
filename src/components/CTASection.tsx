@@ -6,7 +6,7 @@ export default function CallToAction() {
     <section className="w-full bg-neutral-950 dark:bg-indigo-700 py-20 px-6 sm:px-10 lg:px-16 text-center">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-4xl sm:text-5xl font-extrabold text-white">
-          Get Started with <span className="text-yellow-300">Flow-Post</span> Today!
+          Get Started with <span className="text-yellow-300">FlowPost</span> Today!
         </h2>
         <p className="mt-4 text-lg text-indigo-200">
           Join thousands of teams streamlining their email workflow effortlessly.
