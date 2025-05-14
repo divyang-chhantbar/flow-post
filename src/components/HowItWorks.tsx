@@ -41,8 +41,8 @@ export default function HowItWorks() {
     <div className="w-full bg-neutral-950 text-white font-sans md:px-10">
       {/* Title Section */}
       <div className="max-w-7xl mx-auto py-20 px-4 md:px-8 lg:px-10 text-center">
-        <h2 className="text-xl md:text-4xl font-bold mb-4 text-white">
-          How Flow-Post Works
+        <h2 className="text-xl md:text-6xl font-bold mb-4 text-white">
+          How FlowPost Works
         </h2>
         <p className="text-neutral-300 text-sm md:text-base max-w-xl mx-auto">
           A simple 4-step process to send bulk emails effortlessly.
