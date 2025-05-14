@@ -17,26 +17,32 @@ const TestimonialCard = ({ name, role, company, quote, feature }: TestimonialPro
     whileHover={{ scale: 1.05 }}
     transition={{ type: "spring", stiffness: 300 }}
   >
+    <div className="flex flex-col justify-between h-full">
+  <div>
     <FeatureIcon Icon={feature.icon} />
-    <div className="mt-8">
-      <p className="text-white dark:text-gray-300 mb-6 text-lg">&ldquo;{quote}&rdquo;</p>
-      <div className="flex items-center">
-        <div className="flex-shrink-0 mr-4">
-            <img
-                className="h-12 w-12 rounded-full"
-                src={`https://ui-avatars.com/api/?name=${name}&background=random`}
-                alt={name}
-            />
-        </div>
-        <div>
-          <p className="text-md font-semibold text-gray-900 dark:text-white">{name}</p>
-          <p className="text-sm text-white dark:text-gray-400">
-            {role}, {company}
-          </p>
-        </div>
-      </div>
+    <div className="mt-4">
+      <p className="text-white dark:text-gray-300 text-lg mb-6 line-clamp-4 min-h-[96px]">
+        &ldquo;{quote}&rdquo;
+      </p>
     </div>
-    <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-100 to-indigo-200 dark:from-indigo-900 dark:to-indigo-800 rounded-tl-full opacity-50"></div>
+  </div>
+
+  <div className="flex items-center mt-auto">
+    <div className="flex-shrink-0 mr-4">
+      <img
+        className="h-12 w-12 rounded-full"
+        src={`https://ui-avatars.com/api/?name=${name}&background=random`}
+        alt={name}
+      />
+    </div>
+    <div>
+      <p className="text-md font-semibold text-white">{name}</p>
+      <p className="text-sm text-white dark:text-gray-400">
+        {role}, {company}
+      </p>
+    </div>
+  </div>
+</div>
   </motion.div>
 )
 
