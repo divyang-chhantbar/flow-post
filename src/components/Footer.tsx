@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link'
-import { FaTwitter, FaLinkedin, FaHeart } from 'react-icons/fa'
+import { FaTwitter, FaLinkedin, FaGithub , FaHeart } from 'react-icons/fa'
 
 export default function Footer() {
     return (
@@ -13,6 +13,9 @@ export default function Footer() {
                         </Link>
                         <Link href="https://www.linkedin.com/in/divyang-chhantbar-9828b91a5/" target="_blank" rel="noopener noreferrer">
                             <FaLinkedin className='text-2xl hover:text-blue-600 transition-colors' />
+                        </Link>
+                        <Link href="https://github.com/divyang-chhantbar" target="_blank" rel="noopener noreferrer">
+                            <FaGithub className='text-2xl hover:text-gray-400 transition-colors' />
                         </Link>
                     </div>
                     <div className='flex items-center gap-1'>
