@@ -69,7 +69,7 @@ export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
       </SidebarContent>
       <SidebarFooter className="border-t border-border p-4">
       <ThemeToggle collapsed={collapsed} variant="outline" size={collapsed ? "icon" : "default"} />
-        <Button variant="outline" size="sm" onClick={() => signOut()} className={`w-full ${collapsed ? "justify-center px-0" : "justify-center"}`}>
+        <Button variant="outline" size={collapsed ? "icon" : "default"} onClick={() => signOut()}  className={`rounded-md flex items-center justify-center ${collapsed ? "h-9 w-9 p-0" : "w-full"}`}>
           <LogOut className={`h-4 w-4 ${collapsed ? "" : "mr-2"}`} /> {!collapsed && "Sign Out"}
         </Button>
       </SidebarFooter>
